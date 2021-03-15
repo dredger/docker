@@ -1,0 +1,98 @@
+version: '3'
+
+services:
+  nginx:
+    container_name: drew_web_nginx
+    image: nginx:1.13
+    networks:
+      - drew_network
+    ports:
+      - 80:80
+    volumes:
+      - ../:/usr/share/nginx/html/
+      - ../:/var/www/html/      
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./server_logs:/usr/share/server_logs
+    depends_on:
+      - php
+
+  mariadb:
+    container_name: drew_web_maria
+    image: mariadb:10.3
+    networks:
+      - mozeo_network
+    volumes:
+      - ./mariadb/db:/var/lib/mysql
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+
+  php:
+    container_name: drew_web_php
+#    image: php:7.0-fpm
+    build: ./php70
+    networks:
+      - mozeo_network
+    depends_on:
+      - mariadb
+    volumes:
+      - ./mariadb/db:/var/lib/mysql
+      - ../:/usr/share/nginx/html
+      - ../:/var/www/html
+      - ./php/custom.ini:/usr/local/etc/php/conf.d/custom.ini
+
+  phpmyadmin:
+    container_name: drew_web_pma
+    image: phpmyadmin/phpmyadmin
+    networks:
+      - mozeo_network   
+    restart: always         
+    links: 
+      - mariadb:db
+    ports:
+      - 8765:80
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    depends_on:
+      - mariadb
+#
+#  phantomjs-server:
+#    image: wernight/phantomjs
+#    labels:
+#      com.deliciousbrains.service: "phantomjs-server"
+#      com.deliciousbrains.project: "${COMPOSE_PROJECT_NAME}"
+#    expose:
+#        - "8910"
+#    links:
+#        - php
+#    command: ["phantomjs", "--webdriver=8910"]
+#
+##  phantomjs:
+##    container_name: drew_web_phantomjs
+##    image: wernight/phantomjs:latest
+##    ports:
+##      - 8910:8910
+##    entrypoint:
+##      - phantomjs
+##      - --webdriver=8910
+##      - --ignore-ssl-errors=true
+##      - --load-images=false
+
+
+  redis:
+    container_name: drew_web_redis
+    image: redis:latest
+    networks:
+      - mozeo_network
+    volumes:
+        - ../:/usr/share/nginx/html
+        - ../:/var/www/html
+        - ./config/redis.conf:/redis.conf
+    command: [ "redis-server", "/redis.conf" ]
+    ports:
+      - 6379:6379
+
+# networks
+networks:
+  mozeo_network:    

@@ -1,0 +1,56 @@
+From php:7.0-fpm
+
+MAINTAINER andrew.dulev.mmo@gmail.com
+
+
+#remove  composer.json.lock
+#  php composer.phar install
+# install git
+RUN apt-get update && \
+    apt-get upgrade -y && \
+    apt-get install -y git
+
+#Midnight commander
+RUN apt-get install -y mc  libpq-dev libsqlite3-dev
+
+#php extensions
+#RUN  docker-php-ext-install curl dom  fileinfo  gd igbinary json mysqlnd mysqlnd_mysqli mysqlnd_mysql  pdo pdo_mysqlnd pdo_sqlite phar posix redis sqlite3 sysvmsg sysvsem sysvshm wddx xmlreader xmlwriter xsl zip mbstring  pecl-imagick
+#RUN  docker-php-ext-install  -j$(nproc)   fileinfo  json mysql pdo pdo_mysql pdo_sqlite  xmlreader xmlwriter xsl zip mbstring
+RUN docker-php-ext-install  mysqli pdo_mysql pdo_sqlite mysqli
+RUN docker-php-ext-install curl dom  fileinfo  gd igbinary json
+RUN docker-php-ext-install phar posix  sysvmsg sysvsem sysvshm wddx xmlreader xmlwriter xsl zip mbstring
+
+# Install php-igbinary
+RUN cd /usr/src/php/ext \
+    && curl -fsSL https://github.com/igbinary/igbinary7/archive/master.tar.gz -o igbinary.tar.gz \
+    && mkdir -p igbinary \
+    && tar -xf igbinary.tar.gz -C igbinary --strip-components=1 \
+    && rm igbinary.tar.gz \
+    && docker-php-ext-install igbinary
+
+RUN pecl install redis imagick \
+    && docker-php-ext-enable redis
+
+# Install Composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+# install php vendors
+#RUN bash composer.sh;
+
+# install Mozeo folders
+
+COPY ./install.sh /
+RUN chmod +x /install.sh
+
+#ENTRYPOINT ["/install.sh"]
+#CMD ["true", "batman", "superman"]
+
+#setup envinronment file
+COPY ./environment.sh /
+RUN chmod +x /environment.sh
+
+# Clear cache
+COPY ./clear_cache.sh /
+RUN chmod +x /clear_cache.sh
+
+CMD ["php7.0-fpm"]
