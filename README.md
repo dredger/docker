@@ -7,7 +7,7 @@ docker && docker compose examples
 
 ##  folders structure 
 
-../all files in this folder awailable in the php container 
+../all files in this folder available in the php container 
  - docker (clone this repo)
  - project (web server root dis assignet to this folder )
  - any_other_folder (just edit the nginx.config file to asssign web host to this dir) 
