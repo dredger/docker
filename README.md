@@ -15,8 +15,10 @@ https://docs.docker.com/compose/install/
 
 ### add following lines in the hosts file 
 
-127.0.0.1 test.local
+127.0.0.1 test.local 
+
 127.0.0.1 sub.test.local
+
 127.0.0.1 pma.local
 
 #### Win 10 hosts file location 
