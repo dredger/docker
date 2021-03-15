@@ -20,7 +20,7 @@ services:
     container_name: drew_web_maria
     image: mariadb:10.3
     networks:
-      - mozeo_network
+      - drew_network
     volumes:
       - ./mariadb/db:/var/lib/mysql
     ports:
@@ -32,8 +32,10 @@ services:
     container_name: drew_web_php
 #    image: php:7.0-fpm
     build: ./php70
+    #build: ./php70
+    #build: ./php70
     networks:
-      - mozeo_network
+      - drew_network
     depends_on:
       - mariadb
     volumes:
@@ -46,7 +48,7 @@ services:
     container_name: drew_web_pma
     image: phpmyadmin/phpmyadmin
     networks:
-      - mozeo_network   
+      - drew_network   
     restart: always         
     links: 
       - mariadb:db
@@ -84,7 +86,7 @@ services:
     container_name: drew_web_redis
     image: redis:latest
     networks:
-      - mozeo_network
+      - drew_network
     volumes:
         - ../:/usr/share/nginx/html
         - ../:/var/www/html
@@ -95,4 +97,4 @@ services:
 
 # networks
 networks:
-  mozeo_network:    
+  drew_network:    
