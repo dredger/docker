@@ -34,13 +34,51 @@ https://docs.docker.com/compose/install/
  cd d:\docker_folder\;
  docker-compose up --build   --remove-orphans
 
+
+# Execute script in the php container 
+
+
+## connect to container (power shell or putty ):   
+
+### WAY  1
+
+docker exec -it drew_web_php bash
+
+### execute script 
+
+ php -v 
+ 
+ php composer.phar -v
+ 
+ php composer.phar install
+ 
+ php composer.phar update
+
+
 ## install vendors if required
 
 cd /var/www/html/; php composer.phar install;
 
-## connect to container (power shell or putty):   
 
-docker exec -it drew_web_php bash
+
+# Server helper 
+
+## nginx 
+
+### nginx restart 
+
+/etc/init.d/nginx restart
+
+## Maria DB 
+
+user: root
+password: root
+host: localhost
+por:3306
+ 
+
+
+
 
 
 
