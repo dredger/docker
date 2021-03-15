@@ -33,7 +33,16 @@ https://docs.docker.com/compose/install/
  
  run editor with administrator rights 
  C:\Windows\System32\drivers\etc\hosts
-
+ 
+ ## switching php version 
+ 
+  uncomment one of the following lines in the file docker-compose.yml
+   
+     build: ./php70
+     
+     #build: ./php70
+     
+     #build: ./php70
 
 # RUN 
 
