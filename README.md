@@ -8,6 +8,7 @@ docker && docker compose examples
 ##  install docker and docker compose
 
 https://docs.docker.com/get-docker/
+
 https://docs.docker.com/compose/install/
 
 ## edit hosts file 
