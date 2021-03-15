@@ -72,8 +72,11 @@ cd /var/www/html/; php composer.phar install;
 ## Maria DB 
 
 user: root
+
 password: root
+
 host: localhost
+
 por:3306
  
 
