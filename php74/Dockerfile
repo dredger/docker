@@ -202,6 +202,8 @@ RUN apt-get install -y  nodejs
 #     && phantomjs -v \
 #     && apt-get install fontconfig
 
+RUN echo 'memory_limit = 512M' >> /usr/local/etc/php/conf.d/docker-php-memlimit.ini;
+
 # Clean system
 RUN apt-get purge -y $buildDeps \
     && apt-get autoremove -y \
