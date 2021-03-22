@@ -1,4 +1,4 @@
-From php:7.0-fpm
+FROM php:7.4-fpm
 
 MAINTAINER andrew.dulev.mmo@gmail.com
 
@@ -15,29 +15,88 @@ ENV XDEBUG_VERSION 2_4_0RC4
 RUN apt-get update && apt-get install -y git mc vim cron gnupg openssh-client unzip wget curl build-essential tar --no-install-recommends
 
 # Install PHP extensions
-RUN buildDeps=" \
-        libicu-dev \
-        libpq-dev \
-        libmcrypt-dev \
+
+RUN apt-get update && apt-get install -y \
         libfreetype6-dev \
         libjpeg62-turbo-dev \
-        libbz2-dev \
-        libxslt-dev \
-        libcurl4-openssl-dev \
-        libmemcached-dev \
-        zlib1g-dev \
-        libncurses5-dev \
-        libc-client-dev \
-        libkrb5-dev \
-        libpspell-dev \
-        libtidy-dev \
-        libxml2-dev \
-    " \
-    && apt-get install -y $buildDeps --no-install-recommends \
-    && rm -r /var/lib/apt/lists/* \
-    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
-    && docker-php-ext-configure pdo_mysql --with-pdo-mysql=mysqlnd \
-    && docker-php-ext-install \
+        libpng-dev \
+        libicu-dev \
+         libpq-dev \
+         libmcrypt-dev \
+         libbz2-dev \
+         libxslt-dev \
+         libcurl4-openssl-dev \
+         libmemcached-dev \
+         zlib1g-dev \
+         libncurses5-dev \
+         libc-client-dev \
+         libkrb5-dev \
+         libpspell-dev \
+         libtidy-dev \
+         libxml2-dev \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install -j$(nproc) gd
+
+# RUN buildDeps=" \
+#         libicu-dev \
+#         libpq-dev \
+#         libmcrypt-dev \
+#         libfreetype6-dev \
+#         libjpeg62-turbo-dev \
+#         libbz2-dev \
+#         libxslt-dev \
+#         libcurl4-openssl-dev \
+#         libmemcached-dev \
+#         zlib1g-dev \
+#         libncurses5-dev \
+#         libc-client-dev \
+#         libkrb5-dev \
+#         libpspell-dev \
+#         libtidy-dev \
+#         libxml2-dev \
+#     " \
+#     && apt-get install -y $buildDeps --no-install-recommends \
+#     && rm -r /var/lib/apt/lists/* \
+#     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
+#     && docker-php-ext-configure pdo_mysql --with-pdo-mysql=mysqlnd \
+#     && docker-php-ext-install \
+#       gettext \
+#       exif \
+#       curl \
+#       calendar \
+#       intl \
+#       mbstring \
+#       mcrypt \
+#       pcntl \
+#       pdo_mysql \
+#       pdo_pgsql \
+#       pgsql \
+#       zip \
+#       opcache \
+#       iconv \
+#       mcrypt \
+#       gd \
+#       bcmath \
+#       bz2 \
+#       xsl \
+#       xmlrpc \
+#       mysqli \
+#       pspell \
+#       shmop \
+#       sockets \
+#       sysvmsg \
+#       sysvsem \
+#       sysvshm \
+#       tidy \
+#       ftp\
+#       fileinfo\
+#       json\
+#       xmlwriter\
+#       xsl\
+#       zip
+
+
+RUN docker-php-source extract \
       gettext \
       exif \
       curl \
@@ -71,7 +130,8 @@ RUN buildDeps=" \
       json\
       xmlwriter\
       xsl\
-      zip
+      zip\
+    && docker-php-source delete
 
 RUN apt-get update && \
     pecl channel-update pecl.php.net && \
@@ -103,9 +163,11 @@ RUN docker-php-ext-enable imagick
 #    && docker-php-ext-configure xdebug --enable-xdebug \
 #    && docker-php-ext-install xdebug
 
-# Install php-wddx
-RUN docker-php-ext-configure wddx --enable-libxml \
-    && docker-php-ext-install wddx
+
+# Install php-wddx deprecated fro php 7.4 
+# RUN docker-php-ext-configure wddx --enable-libxml \
+#     && docker-php-ext-install wddx
+
 
 # Install phpunit and put binary into $PATH
 RUN curl -sSo phpunit.phar https://phar.phpunit.de/phpunit.phar \
@@ -134,11 +196,11 @@ RUN apt-get install -y  nodejs
 
 # install phantomjs
 #RUN  curl -O https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2 \
-RUN  curl -fsSL https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2 -o  phantomjs-2.1.1-linux-x86_64.tar.bz2 \
-    && tar xvf phantomjs-2.1.1-linux-x86_64.tar.bz2  \
-    && cp phantomjs-2.1.1-linux-x86_64/bin/phantomjs /usr/local/bin \
-    && phantomjs -v \
-    && apt-get install fontconfig
+# RUN  curl -fsSL https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2 -o  phantomjs-2.1.1-linux-x86_64.tar.bz2 \
+#     && tar xvf phantomjs-2.1.1-linux-x86_64.tar.bz2  \
+#     && cp phantomjs-2.1.1-linux-x86_64/bin/phantomjs /usr/local/bin \
+#     && phantomjs -v \
+#     && apt-get install fontconfig
 
 # Clean system
 RUN apt-get purge -y $buildDeps \
