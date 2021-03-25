@@ -37,6 +37,12 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) gd
 
+
+#PDO MYSQL
+RUN docker-php-ext-install pdo pdo_mysql
+# for mysqli if you want
+RUN docker-php-ext-install mysqli && docker-php-ext-enable mysqli
+
 # RUN buildDeps=" \
 #         libicu-dev \
 #         libpq-dev \
@@ -202,7 +208,7 @@ RUN apt-get install -y  nodejs
 #     && phantomjs -v \
 #     && apt-get install fontconfig
 
-RUN echo 'memory_limit = 512M' >> /usr/local/etc/php/conf.d/docker-php-memlimit.ini;
+RUN echo 'memory_limit = 512' >> /usr/local/etc/php/conf.d/docker-php-memlimit.ini;
 
 # Clean system
 RUN apt-get purge -y $buildDeps \
