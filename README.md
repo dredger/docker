@@ -10,7 +10,7 @@ docker && docker compose examples
 ../all files in this folder available in the php container 
  - docker (clone this repo)
  - project (web server root dis assignet to this folder )
- - any_other_folder (just edit the nginx.config file to asssign web host to this dir) 
+ - project2  (just edit the nginx.config file to asssign web host to this dir) 
  
 
 ##  install docker and docker compose
@@ -40,9 +40,9 @@ https://docs.docker.com/compose/install/
    
      build: ./php70
      
-     #build: ./php70
+     #build: ./php71
      
-     #build: ./php70
+     #build: ./php74
 
 # RUN 
 
