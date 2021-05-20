@@ -194,6 +194,7 @@ RUN curl -sS https://getcomposer.org/installer | php \
     && mv composer.phar /usr/local/bin/ \
     && ln -s /usr/local/bin/composer.phar /usr/local/bin/composer
 
+
 # install php vendors will be done manually
 
 # Install Node.js/bower/gulp/grunt
@@ -208,7 +209,7 @@ RUN apt-get install -y  nodejs
 #     && phantomjs -v \
 #     && apt-get install fontconfig
 
-RUN echo 'memory_limit = 512' >> /usr/local/etc/php/conf.d/docker-php-memlimit.ini;
+RUN echo 'memory_limit = -1' >> /usr/local/etc/php/conf.d/docker-php-memlimit.ini;
 
 # Clean system
 RUN apt-get purge -y $buildDeps \

@@ -23,6 +23,7 @@ services:
       - drew_network
     volumes:
       - ./mariadb/db:/var/lib/mysql
+      - ./mariadb/conf.d/my-custom.cnf:/etc/mysql/conf.d/my.cnf
     ports:
       - 3306:3306
     environment:

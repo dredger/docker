@@ -37,6 +37,8 @@ composer:
 
 
 --- DB ---
+host_docker: drew_web_maria
+host_external: localhost
 user: root
 password: root
 host: localhost
@@ -44,3 +46,25 @@ por:3306
 
 --- nginx ---
  /etc/init.d/nginx restart
+
+
+SELECT
+  variable_name,
+  variable_value AS innodb_log_buffer_size_bytes,
+  ROUND(variable_value / (1024*1024)) AS innodb_log_buffer_size_mb
+FROM information_schema.global_variables
+WHERE variable_name LIKE  'innodb_buffer_pool_size';
+
+Show variables LIKE  '%innodb_buffer';
+
+docker exec -it drew_web_php bash
+docker exec -it drew_web_maria bash
+
+https://phpforus.com/how-to-make-mysql-run-fast-with-ext4-on-ubuntu/
+$ sudo gedit /etc/fstab
+UUID=b87de212-52ca-4600-9e30-6e80e24df1ed / ext4 errors=remount-ro,barrier=0 0 1
+
+
+
+
+ 
