@@ -41,7 +41,7 @@ host_docker: drew_web_maria
 host_external: localhost
 user: root
 password: root
-host: localhost
+host: localhost	
 por:3306
 
 --- nginx ---

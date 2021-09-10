@@ -32,10 +32,10 @@ services:
   php:
     container_name: drew_web_php
 #    image: php:7.0-fpm
-#    build: ./php70
+    build: ./php70
     #build: ./php71
     #build: ./php72
-    build: ./php74
+#    build: ./php74
     links:
       - mariadb:mysql
     networks:
