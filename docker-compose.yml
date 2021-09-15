@@ -32,7 +32,7 @@ services:
   php:
     container_name: drew_web_php
 #    image: php:7.0-fpm
-    build: ./php70
+    build: ./php74
     #build: ./php71
     #build: ./php72
 #    build: ./php74
@@ -46,7 +46,7 @@ services:
       - ./mariadb/db:/var/lib/mysql
       - ../:/usr/share/nginx/html
       - ../:/var/www/html
-      - ./php/custom.ini:/usr/local/etc/php/conf.d/custom.ini
+      - ./php74/custom.ini:/usr/local/etc/php/conf.d/custom.ini
 
   phpmyadmin:
     container_name: drew_web_pma
@@ -88,13 +88,13 @@ services:
 
   redis:
     container_name: drew_web_redis
-    image: redis:latest
+    image : redis:latest
     networks:
       - drew_network
     volumes:
         - ../:/usr/share/nginx/html
         - ../:/var/www/html
-        - ./config/redis.conf:/redis.conf
+        - ./config/redis.conf:/usr/local/etc/redis/redis.conf
     command: [ "redis-server", "/redis.conf" ]
     ports:
       - 6379:6379
