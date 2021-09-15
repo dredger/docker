@@ -67,4 +67,5 @@ UUID=b87de212-52ca-4600-9e30-6e80e24df1ed / ext4 errors=remount-ro,barrier=0 0 1
 
 
 
- 
+ check Hyper-V
+  Get-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V
