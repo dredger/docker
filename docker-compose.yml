@@ -18,12 +18,14 @@ services:
 
   mariadb:
     container_name: drew_web_maria
-    image: mariadb:10.3
+    image: mysql:latest
+    restart: unless-stopped
+    tty: true
     networks:
       - drew_network
-    volumes:
-      - ./mariadb/db:/var/lib/mysql
-      - ./mariadb/conf.d/my-custom.cnf:/etc/mysql/conf.d/my.cnf
+    # volumes:
+    #   - ./mariadb/db:/var/lib/mysql
+    #   - ./mariadb/conf.d/my-custom.cnf:/etc/mysql/conf.d/my.cnf
     ports:
       - 3306:3306
     environment:
