@@ -28,7 +28,7 @@ cd /var/www/html/; php composer.phar install;
 
 ---- execute php script ----
 
-connect to container (power shell or putty):   docker exec -it mozeo_container_php bash
+connect to container (power shell or putty):   docker exec -it drew_web_php bash
 
 composer:
  php composer.phar -v
