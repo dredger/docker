@@ -14,9 +14,9 @@ add dir docker to the excluded path: https://prnt.sc/vvag3w
 --- prepare host file ---
 Win host file location: c:\Windows\System32\drivers\etc\hosts
 
-127.0.0.1 mozeo.local	
-127.0.0.1 dashboard.mozeo.local
-127.0.0.1 pma.mozeo.local
+127.0.0.1 test.local	
+127.0.0.1 sub.test.local
+127.0.0.1 pma.local (root:root)
 
 
 ----- run docker container ---
