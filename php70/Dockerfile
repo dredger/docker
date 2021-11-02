@@ -73,15 +73,15 @@ RUN buildDeps=" \
       xsl\
       zip
 
-RUN apt-get update && \
-    pecl channel-update pecl.php.net && \
-    pecl install apcu igbinary mongodb && \
-    # compile Redis with igbinary support
-    pecl bundle redis && cd redis && phpize && ./configure --enable-redis-igbinary && make && make install && \
-    docker-php-ext-install bcmath sockets && \
-    docker-php-ext-enable apcu igbinary mongodb opcache redis && \
-    docker-php-source delete && \
-    rm -r /tmp/* /var/cache/* /var/www/html/*
+# RUN apt-get update && \
+#     pecl channel-update pecl.php.net && \
+#     pecl install apcu igbinary mongodb && \
+#     # compile Redis with igbinary support
+#     pecl bundle redis && cd redis && phpize && ./configure --enable-redis-igbinary && make && make install && \
+#     docker-php-ext-install bcmath sockets && \
+#     docker-php-ext-enable apcu igbinary mongodb opcache redis && \
+#     docker-php-source delete && \
+#     rm -r /tmp/* /var/cache/* /var/www/html/*
 #
 #RUN pecl install redis  \
 #    && docker-php-ext-enable redis
@@ -108,10 +108,10 @@ RUN docker-php-ext-configure wddx --enable-libxml \
     && docker-php-ext-install wddx
 
 # Install phpunit and put binary into $PATH
-RUN curl -sSo phpunit.phar https://phar.phpunit.de/phpunit.phar \
-    && chmod 755 phpunit.phar \
-    && mv phpunit.phar /usr/local/bin/ \
-    && ln -s /usr/local/bin/phpunit.phar /usr/local/bin/phpunit
+# RUN curl -sSo phpunit.phar https://phar.phpunit.de/phpunit.phar \
+#     && chmod 755 phpunit.phar \
+#     && mv phpunit.phar /usr/local/bin/ \
+#     && ln -s /usr/local/bin/phpunit.phar /usr/local/bin/phpunit
 
 # RUN  sh -c "printf \"#!/bin/sh  export PATH=/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin  docker run -v $(pwd):/app --rm phpunit/phpunit run \\\$@  \" > /usr/local/bin/phpunit" \
 #     &&  chmod +x /usr/local/bin/phpunit
@@ -129,16 +129,45 @@ RUN curl -sS https://getcomposer.org/installer | php \
 # install php vendors will be done manually
 
 # Install Node.js/bower/gulp/grunt
-RUN curl -sL https://deb.nodesource.com/setup_10.x  | bash -
+RUN curl -sL https://deb.nodesource.com/setup_16.x  | bash -
 RUN apt-get install -y  nodejs
 
 # install phantomjs
 #RUN  curl -O https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2 \
-RUN  curl -fsSL https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2 -o  phantomjs-2.1.1-linux-x86_64.tar.bz2 \
-    && tar xvf phantomjs-2.1.1-linux-x86_64.tar.bz2  \
-    && cp phantomjs-2.1.1-linux-x86_64/bin/phantomjs /usr/local/bin \
-    && phantomjs -v \
-    && apt-get install fontconfig
+
+#RUN  curl -fsSL https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2 -o  phantomjs-2.1.1-linux-x86_64.tar.bz2 \
+#    && tar xvf phantomjs-2.1.1-linux-x86_64.tar.bz2  \
+#    && cp phantomjs-2.1.1-linux-x86_64/bin/phantomjs /usr/local/bin \
+#    && phantomjs -v \
+#    && apt-get install fontconfig
+
+ENV PHANTOMJS_VERSION=phantomjs-2.1.1-linux-x86_64 
+ENV PHANTOMJS_DIR=/app/phantomjs
+
+RUN apt-get update -y
+RUN apt-get install -y apt-utils libfreetype6-dev libfontconfig1-dev wget bzip2
+
+RUN wget --no-check-certificate https://bitbucket.org/ariya/phantomjs/downloads/${PHANTOMJS_VERSION}.tar.bz2
+RUN tar xvf ${PHANTOMJS_VERSION}.tar.bz2
+RUN mv ${PHANTOMJS_VERSION}/bin/phantomjs /usr/local/bin/
+RUN rm -rf phantom*
+
+RUN mkdir -p ${PHANTOMJS_DIR}
+RUN echo '"use strict"; \n\
+  console.log("Hello, world!"); + \n\
+  console.log("using PhantomJS version " + \n\
+  phantom.version.major + "." + \n\
+  phantom.version.minor + "." + \n\
+  phantom.version.patch); \n\
+  phantom.exit();' \
+  > ${PHANTOMJS_DIR}/script.js
+
+RUN  apt-get update -y && apt-get install -y \
+      git \
+      python \
+     && rm -rf /var/lib/apt/lists/*
+
+
 
 # Clean system
 RUN apt-get purge -y $buildDeps \

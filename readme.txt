@@ -66,6 +66,27 @@ UUID=b87de212-52ca-4600-9e30-6e80e24df1ed / ext4 errors=remount-ro,barrier=0 0 1
 
 
 
+sudo wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2
+sudo tar xjf phantomjs-2.1.1-linux-x86_64.tar.bz2
+sudo ln -s /usr/local/share/phantomjs-2.1.1-linux-x86_64/bin/phantomjs /usr/local/share/phantomjs
+sudo ln -s /usr/local/share/phantomjs-2.1.1-linux-x86_64/bin/phantomjs /usr/local/bin/phantomjs
+sudo ln -s /usr/local/share/phantomjs-2.1.1-linux-x86_64/bin/phantomjs /usr/bin/phantomjs
+
 
  check Hyper-V
   Get-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V
+
+
+  apt-get install phantomjs
+
+apt-get remove phantomjs
+
+  export DISPLAY=:0    
+export QT_QPA_PLATFORM='offscreen'
+
+
+
+wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2
+tar -xvjf phantomjs-2.1.1-linux-x86_64.tar.bz2 
+
+ ln -sf /usr/local/share/phantomjs-2.1.1-linux-x86_64/bin/phantomjs /usr/bin
